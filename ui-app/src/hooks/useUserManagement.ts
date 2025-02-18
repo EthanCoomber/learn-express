@@ -24,7 +24,6 @@ export const useUserManagement = () => {
   const getAllUsernames = async () => {
     try {
       const response = await axios.get<UsernameResponse[]>('http://localhost:8000/read/usernames');
-      console.log(response.data);
       setUsernames(response.data);
       setShowUsernames(true);
       setShowAddUserForm(false);
