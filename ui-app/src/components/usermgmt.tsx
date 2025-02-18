@@ -78,6 +78,7 @@ const UserManagement = () => {
       if (data.length > 0) {
         setSearchEmail(data);
       } else {
+        console.log('data', data);
         setSearchEmail([{ id: 'error', email: 'Not Found' }]);
       }
       setShowEmail(true);

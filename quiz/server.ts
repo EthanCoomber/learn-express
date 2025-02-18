@@ -61,6 +61,7 @@ const addMsgToRequest = (req: UserRequest, res: Response, next: NextFunction) =>
 app.use(cors({ origin: 'http://localhost:3000' }));
 // adds the middleware function to the application
 app.use('/read/usernames', addMsgToRequest);
+app.use('/read/username/:name', addMsgToRequest);
 
 // a route that sends the usernames of the users to the client
 app.get('/read/usernames', (req: UserRequest, res: Response) => {
@@ -68,6 +69,22 @@ app.get('/read/usernames', (req: UserRequest, res: Response) => {
     return { id: user.id, username: user.username };
   });
   res.send(usernames);
+});
+
+// a route that finds a user by username and returns their email
+app.get('/read/username/:name', (req: UserRequest, res: Response) => {
+  const username = req.params.name;
+  const matchingUsers = req.users?.filter(user => user.username.toLowerCase() === username.toLowerCase());
+
+  if (matchingUsers && matchingUsers.length > 0) {
+    const userEmails = matchingUsers.map(user => ({
+      id: user.id,
+      email: user.email
+    }));
+    res.send(userEmails);
+  } else {
+    res.status(404).send({ error: 'User not found' });
+  }
 });
 
 // a middleware function that parses the request body to json
